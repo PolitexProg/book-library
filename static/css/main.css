@@ -1,0 +1,11 @@
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.cover-picture {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+}

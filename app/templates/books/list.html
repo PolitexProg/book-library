@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %} {% block title %}Книги{% endblock %}
+
+{% block content %}
+<div class="container py-4 py-md-5">
+
+    <h1 class="mb-4 display-5 fw-bold">Books List</h1>
+
+    <div class="row mb-2">
+        <div class="col-4">
+            <form method="get" class="d-flex">
+                <input type="text" name="q" placeholder="Search books..." class="form-control me-2" value="{{ search_query }}">
+
+                <button type="submit" class="btn btn-success">Search</button>
+            </form>
+        </div>
+    </div>
+    {% if books %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            
+            {% for book in books %}
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0">
+                    
+                    {% if book.cover_picture and book.cover_picture.url %}
+                        <img src="{{ book.cover_picture.url }}" 
+                             class="card-img-top" 
+                             alt="Обложка {{ book.title }}" 
+                             style="height: 300px; object-fit: cover;">
+                    
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                             style="height: 300px;">
+                            <span class="text-muted small">Нет обложки</span>
+                        </div>
+                    {% endif %}
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-bold">
+                            <a href="{% url 'books:detail' book.pk %}" class="text-decoration-none">
+                                {{ book.title }}
+                            </a>
+                        </h5>
+                        
+                        <p class="card-text text-muted small flex-grow-1">
+                            {{ book.description|truncatewords:25 }}
+                        </p>
+                        
+                        <a href="{% url 'books:detail' book.pk %}" class="btn btn-primary mt-auto">
+                            Подробнее
+                        </a>
+                    </div>
+                </div> </div> {% endfor %}
+
+        </div> {% else %}
+        <div class="alert alert-secondary" role="alert">
+            <p class="lead mb-0">В коллекции пока нет ни одной книги.</p>
+        </div>
+    {% endif %}
+    
+    {% comment %} Блок пагинации {% endcomment %}
+    {% if is_paginated %}
+        <nav aria-label="Page navigation" class="mt-5 d-flex justify-content-center">
+            <ul class="pagination shadow-sm">
+
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+                
+            </ul>
+        </nav>
+    {% endif %}
+    {% comment %} Конец блока пагинации {% endcomment %}
+
+</div> {% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - Goodreads Clone{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <!-- User Profile Card: Using Bootstrap 5 classes for style and shadow -->
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white rounded-top-4 p-4 text-center">
+                    <!-- Profile Picture Section -->
+                    <div class="mb-3">
+                        {% if user.profile_picture %}
+                            <!-- Display actual profile picture -->
+                            <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s Profile Picture" 
+                                 class="rounded-circle border border-4 border-white object-fit-cover" 
+                                 style="width: 120px; height: 120px;">
+                        {% else %}
+                            <!-- Placeholder if no image is available -->
+                            <div class="d-inline-flex align-items-center justify-content-center bg-light text-primary rounded-circle" 
+                                 style="width: 120px; height: 120px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                </svg>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <h4 class="mb-0 fw-bold">{{ user.username }}</h4>
+                    <p class="mb-0 text-white-50">Welcome to your profile!</p>
+                </div>
+
+                <div class="card-body p-5">
+                    <h5 class="card-title text-primary mb-4">Account Information</h5>
+
+                    <!-- Detail Group: Full Name -->
+                    <div class="mb-3 pb-2 border-bottom">
+                        <p class="text-muted fw-bold small mb-0">Full Name</p>
+                        <p class="card-text fs-6">
+                            {% if user.first_name or user.last_name %}
+                                {{ user.first_name }} {{ user.last_name }}
+                            {% else %}
+                                Not provided
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <!-- Detail Group: Email Address -->
+                    <div class="mb-4 pb-2 border-bottom">
+                        <p class="text-muted fw-bold small mb-0">Email Address</p>
+                        <p class="card-text fs-6">{{ user.email }}</p>
+                    </div>
+
+                    <!-- Edit Profile Button -->
+                    <a href="{% url 'users:profile_update' %}" class="btn btn-outline-primary w-100 mt-3">
+                        <span class="me-2" role="img" aria-label="Edit">✏️</span>
+                        Edit Profile
+                    </a>
+                </div>
+            </div>
+            <!-- End User Profile Card -->
+        </div>
+    </div>
+</div>
+{% endblock %}

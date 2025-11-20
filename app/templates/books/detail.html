@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-4 py-md-5">
+    
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold">{{ book.title }}</h1>
+        </div>
+    </div>
+    
+    <div class="row g-4 g-md-5">
+        
+        <div class="col-md-4">
+            {% if book.cover_picture and book.cover_picture.url %}
+                <img src="{{ book.cover_picture.url }}" 
+                     alt="Обложка {{ book.title }}" 
+                     class="img-fluid rounded-3 shadow-lg w-100"
+                     style="object-fit: cover;">
+            {% else %}
+                <div class="bg-light border text-muted d-flex align-items-center justify-content-center rounded-3 shadow-sm" 
+                     style="width: 100%; min-height: 400px; text-align: center;">
+                    <span class="fs-5">Нет обложки</span>
+                </div>
+            {% endif %}
+            
+            <div class="d-grid gap-2 mt-3">
+                 <button class="btn btn-success btn-lg">Добавить в свой список</button>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded-3 h-100">
+                <div class="card-body p-4 p-md-5">
+                    
+                    <h2 class="h4 fw-bold border-bottom pb-2 mb-3">Описание</h2>
+                    <p class="lead mb-4">{{ book.description|linebreaksbr }}</p>
+
+                    <h2 class="h4 fw-bold border-bottom pb-2 mb-3">Детали</h2>
+                    
+                    <ul class="list-unstyled mb-0">
+                        <li class="d-flex justify-content-between py-2 border-bottom">
+                            <span class="fw-bold text-dark">ISBN:</span>
+                            <span class="text-muted">{{ book.isbn }}</span>
+                        </li>
+                        
+                        <li class="d-flex justify-content-between py-2 border-bottom">
+                            <span class="fw-bold text-dark">Автор(ы):</span>
+                            <span class="text-muted text-end">
+                                {% for book_author in authors %}
+                                    {{ book_author.author.first_name }} {{ book_author.author.last_name }}{% if not forloop.last %},<br>{% endif %}
+                                {% empty %}
+                                    Автор не указан
+                                {% endfor %}
+                            </span>
+                        </li>
+                        
+                        <li class="d-flex justify-content-between py-2">
+                            <span class="fw-bold text-dark">Год публикации:</span>
+                            <span class="text-muted">TBD</span> </li>
+                    </ul>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5">
+
+    <div class="row g-5">
+        
+        <div class="col-lg-7">
+            <h2 class="mb-4">Отзывы <span class="badge bg-secondary rounded-pill">{{ reviews.count }}</span></h2>
+            
+            {% if reviews %}
+                <div class="list-group list-group-flush">
+                    {% for review in reviews %}
+                        <div class="list-group-item px-0 py-3">
+                            <div class="d-flex align-items-start w-100">
+                                <div class="flex-shrink-0 me-3">
+                                    {% if review.user.profile_picture and review.user.profile_picture.url %}
+                                        <img src="{{ review.user.profile_picture.url }}" alt="{{ review.user.username }}" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white fw-bold" style="width: 50px; height: 50px;">
+                                            {{ review.user.username|first|upper }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="fw-bold">{{ review.user.username }}</span>
+                                        <span class="text-muted small">{{ review.created_at|date:"d M. Y" }}</span>
+                                    </div>
+                                    <div class="my-1">
+                                        <span class="badge bg-primary">Оценка: {{ review.stars_given }} ⭐</span>
+                                    </div>
+                                    <p class="mb-0 mt-2">
+                                        {{ review.content|linebreaksbr }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <p class="mb-0">Пока нет ни одного отзыва. Будьте первым!</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0 rounded-3" style="position: sticky; top: 2rem;">
+                <div class="card-body p-4">
+                    <h3 class="card-title mb-3">Оставить свой отзыв</h3>
+                    
+                    <form method="POST" action="{% url 'books:add_review' book.pk %}">
+                        {% csrf_token %}
+                        
+                        {{ review_form|crispy }}
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg mt-3">Отправить отзыв</button>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div> </div> {% endblock %}
