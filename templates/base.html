@@ -55,6 +55,9 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                             <li><a class="dropdown-item {% if request.path == profile_url %}active{% endif %}" href="{{ profile_url }}">View Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'users:people' %}">People</a></li>
+                            <li><a class="dropdown-item" href="{% url 'users:friends_list' %}">Friends</a></li>
+                            <li><a class="dropdown-item" href="{% url 'users:friend_requests' %}">Requests</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a></li>
                         </ul>
