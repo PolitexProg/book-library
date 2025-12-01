@@ -10,18 +10,19 @@ User = get_user_model()
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     """Admin for CustomUser that exposes profile picture upload and preview."""
-
+    list_display = ("username", "email", "role", "is_active", "is_staff")
+    
     fieldsets = tuple(
         list(UserAdmin.fieldsets)
         + [
-            ("Profile", {"fields": ("profile_picture",)}),
+            ("Profile", {"fields": ("profile_picture", "role")}),
         ]
     )
 
     add_fieldsets = tuple(
         list(UserAdmin.add_fieldsets)
         + [
-            ("Profile", {"fields": ("profile_picture",)}),
+            ("Profile", {"fields": ("profile_picture", "role")}),
         ]
     )
 

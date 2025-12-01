@@ -51,6 +51,14 @@ class FriendshipRequest(models.Model):
 
 class CustomUser(AbstractUser):
     """Custom user model with an optional profile picture."""
+    ROLE_CHOICES = (
+        ("student", "Student"),
+        ("teacher", "Teacher"),
+        ("parent", "Parent"),
+        ("admin", "Admin"),
+    )
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="student")
+
 
     profile_picture = models.ImageField(
         upload_to="profile_pics/",
@@ -60,8 +68,7 @@ class CustomUser(AbstractUser):
     )
 
     def __str__(self):
-        return self.username
-
+        return f"{self.first_name} {self.last_name} ({self.role})"
     def friends(self):
         """Return a queryset of users who are friends (accepted requests)."""
         # Users who sent accepted requests to me

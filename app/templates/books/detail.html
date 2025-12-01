@@ -49,8 +49,9 @@
                             <span class="fw-bold text-dark">Author(s):</span>
                             <span class="text-muted text-end">
                                 {% for book_author in authors %}
-                                {{ book_author.author.first_name }} {{ book_author.author.last_name }}{% if not
-                                forloop.last %},<br>{% endif %}
+                                {{ book_author.author.first_name }} {{ book_author.author.last_name }}
+                                {% if not forloop.last %},<br>
+                                {% endif %}
                                 {% empty %}
                                 Unknown Author
                                 {% endfor %}
