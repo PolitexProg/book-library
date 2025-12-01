@@ -3,24 +3,54 @@
 {% block title %}Friends - Goodreads Clone{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <h1>Your Friends</h1>
-    {% if friends %}
-        <div class="list-group">
-            {% for friend in friends %}
-            <div class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <strong>{{ friend.username }}</strong>
-                    <div class="text-muted small">{{ friend.email }}</div>
+<div class="container py-4 py-md-5">
+    <h1 class="mb-4 display-5 fw-bold">Your Friends</h1>
+
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4">
+            {% if friends %}
+            <div class="list-group list-group-flush">
+                {% for friend in friends %}
+                <div class="list-group-item px-0 py-3 border-bottom">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-3">
+                            {% if friend.profile_picture %}
+                            <img src="{{ friend.profile_picture.url }}" alt="{{ friend.username }}"
+                                class="rounded-circle shadow-sm" style="width: 50px; height: 50px; object-fit: cover;">
+                            {% else %}
+                            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center text-secondary fw-bold shadow-sm"
+                                style="width: 50px; height: 50px;">
+                                <i class="bi bi-person-fill fs-4"></i>
+                            </div>
+                            {% endif %}
+                            <div>
+                                <h5 class="mb-0 fw-bold">
+                                    <a href="{% url 'users:user_profile' friend.pk %}"
+                                        class="text-decoration-none text-dark">
+                                        {{ friend.username }}
+                                    </a>
+                                </h5>
+                                <div class="text-muted small">{{ friend.email }}</div>
+                            </div>
+                        </div>
+                        <div>
+                            <a href="{% url 'users:user_profile' friend.pk %}"
+                                class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                                View Profile
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <!-- Optionally add Unfriend or Message links here -->
-                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+            {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-people text-muted fs-1 mb-3 d-block"></i>
+                <p class="text-muted fs-5">You don't have any friends yet.</p>
+                <a href="{% url 'users:people' %}" class="btn btn-primary-custom mt-2">Find People</a>
+            </div>
+            {% endif %}
         </div>
-    {% else %}
-        <p class="text-muted">You don't have any friends yet.</p>
-    {% endif %}
+    </div>
 </div>
 {% endblock %}

@@ -6,60 +6,65 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
-            <!-- User Profile Card: Using Bootstrap 5 classes for style and shadow -->
-            <div class="card shadow-lg border-0 rounded-4">
-                <div class="card-header bg-primary text-white rounded-top-4 p-4 text-center">
+            <!-- User Profile Card -->
+            <div class="card shadow-sm rounded-4 border-0 profile-card">
+                <div class="card-header bg-primary text-white rounded-top-4 p-4 text-center profile-header">
                     <!-- Profile Picture Section -->
                     <div class="mb-3">
                         {% if user.profile_picture %}
-                            <!-- Display actual profile picture -->
-                            <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s Profile Picture" 
-                                 class="rounded-circle border border-4 border-white object-fit-cover" 
-                                 style="width: 120px; height: 120px;">
+                        <!-- Display actual profile picture -->
+                        <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s Profile Picture"
+                            class="rounded-circle border border-4 border-white object-fit-cover shadow"
+                            style="width: 120px; height: 120px;">
                         {% else %}
-                            <!-- Placeholder if no image is available -->
-                            <div class="d-inline-flex align-items-center justify-content-center bg-light text-primary rounded-circle" 
-                                 style="width: 120px; height: 120px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
-                                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                                </svg>
-                            </div>
+                        <!-- Placeholder if no image is available -->
+                        <div class="d-inline-flex align-items-center justify-content-center bg-white text-primary rounded-circle mx-auto shadow"
+                            style="width: 120px; height: 120px;">
+                            <i class="bi bi-person-fill fs-1"></i>
+                        </div>
                         {% endif %}
                     </div>
                     <h4 class="mb-0 fw-bold">{{ user.username }}</h4>
-                    <p class="mb-0 text-white-50">Welcome to your profile!</p>
+                    <p class="mb-0 text-white-75">Welcome to your profile!</p>
                 </div>
-
-                <div class="card-body p-5">
+                <div class="card-body p-4">
                     <h5 class="card-title text-primary mb-4">Account Information</h5>
 
                     <!-- Detail Group: Full Name -->
-                    <div class="mb-3 pb-2 border-bottom">
-                        <p class="text-muted fw-bold small mb-0">Full Name</p>
-                        <p class="card-text fs-6">
+                    <div class="mb-3 pb-2 border-bottom border-light">
+                        <p class="text-muted fw-bold small mb-0">
+                            <i class="bi bi-person me-2 profile-detail-icon"></i>
+                            Full Name
+                        </p>
+                        <p class="card-text fs-6 profile-detail-value">
                             {% if user.first_name or user.last_name %}
-                                {{ user.first_name }} {{ user.last_name }}
+                            {{ user.first_name }} {{ user.last_name }}
                             {% else %}
-                                Not provided
+                            <span class="not-provided">Not provided</span>
                             {% endif %}
                         </p>
                     </div>
 
                     <!-- Detail Group: Email Address -->
-                    <div class="mb-4 pb-2 border-bottom">
-                        <p class="text-muted fw-bold small mb-0">Email Address</p>
-                        <p class="card-text fs-6">{{ user.email }}</p>
+                    <div class="mb-4 pb-2 border-bottom border-light">
+                        <p class="text-muted fw-bold small mb-0">
+                            <i class="bi bi-envelope me-2 profile-detail-icon"></i>
+                            Email Address
+                        </p>
+                        <p class="card-text fs-6 profile-detail-value">{{ user.email }}</p>
                     </div>
 
-                    <!-- Edit Profile Button -->
-                    <a href="{% url 'users:profile_update' %}" class="btn btn-outline-primary w-100 mt-3">
-                        <span class="me-2" role="img" aria-label="Edit">✏️</span>
-                        Edit Profile
-                    </a>
-                    <a href="{% url 'users:people' %}" class="btn btn-success w-100 mt-2">
-                        <span class="me-2" role="img" aria-label="People">👥</span>
-                        Find People
-                    </a>
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-3 profile-actions">
+                        <a href="{% url 'users:profile_update' %}" class="btn btn-edit">
+                            <i class="bi bi-pencil me-2"></i>
+                            Edit Profile
+                        </a>
+                        <a href="{% url 'users:people' %}" class="btn btn-find">
+                            <i class="bi bi-people me-2"></i>
+                            Find People
+                        </a>
+                    </div>
                 </div>
             </div>
             <!-- End User Profile Card -->

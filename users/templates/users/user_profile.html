@@ -1,46 +1,109 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends "base.html" %}
+
+{% block title %}{{ target.username }} - Profile{% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-md-4">
-    <div class="card">
-      {% if target.profile_picture %}
-      <img src="{{ target.profile_picture.url }}" class="card-img-top" alt="{{ target.username }}">
-      {% else %}
-      <img src="/media/profile_pics/default_pic.jpeg" class="card-img-top" alt="{{ target.username }}">
-      {% endif %}
-      <div class="card-body">
-        <h4>{{ target.get_full_name|default:target.username }}</h4>
-        <p class="text-muted">@{{ target.username }}</p>
-
-        {% if is_friend %}
-          <button class="btn btn-secondary" disabled>Friends</button>
-        {% elif fr_sent %}
-          <form method="post" action="{% url 'users:respond_friend_request' fr_sent.pk 'cancel' %}">{% csrf_token %}
-            <button class="btn btn-outline-warning" type="submit">Cancel Request</button>
-          </form>
-        {% elif fr_received %}
-          <div class="d-flex">
-            <form method="post" action="{% url 'users:respond_friend_request' fr_received.pk 'accept' %}">{% csrf_token %}
-              <button class="btn btn-primary me-2" type="submit">Accept</button>
-            </form>
-            <form method="post" action="{% url 'users:respond_friend_request' fr_received.pk 'reject' %}">{% csrf_token %}
-              <button class="btn btn-danger" type="submit">Reject</button>
-            </form>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <!-- User Profile Card -->
+      <div class="card shadow-sm rounded-4 border-0 profile-card">
+        <div class="card-header bg-primary text-white rounded-top-4 p-4 text-center profile-header">
+          <!-- Profile Picture Section -->
+          <div class="mb-3">
+            {% if target.profile_picture %}
+            <!-- Display actual profile picture -->
+            <img src="{{ target.profile_picture.url }}" alt="{{ target.username }}'s Profile Picture"
+              class="rounded-circle border border-4 border-white object-fit-cover shadow"
+              style="width: 120px; height: 120px;">
+            {% else %}
+            <!-- Placeholder if no image is available -->
+            <div
+              class="d-inline-flex align-items-center justify-content-center bg-white text-primary rounded-circle mx-auto shadow"
+              style="width: 120px; height: 120px;">
+              <i class="bi bi-person-fill fs-1"></i>
+            </div>
+            {% endif %}
           </div>
-        {% else %}
-          <form method="post" action="{% url 'users:send_friend_request' target.pk %}">{% csrf_token %}
-            <button class="btn btn-success" type="submit">Add Friend</button>
-          </form>
-        {% endif %}
+          <h4 class="mb-0 fw-bold">{{ target.username }}</h4>
+          <p class="mb-0 text-white-75">User Profile</p>
+        </div>
 
+        <div class="card-body p-4">
+          <h5 class="card-title text-primary mb-4">User Information</h5>
+
+          <!-- Detail Group: Full Name -->
+          <div class="mb-3 pb-2 border-bottom border-light">
+            <p class="text-muted fw-bold small mb-0">
+              <i class="bi bi-person me-2 profile-detail-icon"></i>
+              Full Name
+            </p>
+            <p class="card-text fs-6 profile-detail-value">
+              {% if target.first_name or target.last_name %}
+              {{ target.first_name }} {{ target.last_name }}
+              {% else %}
+              <span class="not-provided">Not provided</span>
+              {% endif %}
+            </p>
+          </div>
+
+          <!-- Detail Group: Email Address -->
+          <div class="mb-4 pb-2 border-bottom border-light">
+            <p class="text-muted fw-bold small mb-0">
+              <i class="bi bi-envelope me-2 profile-detail-icon"></i>
+              Email Address
+            </p>
+            <p class="card-text fs-6 profile-detail-value">{{ target.email }}</p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="d-grid gap-3 profile-actions">
+            {% if is_friend %}
+            <button class="btn btn-success" disabled>
+              <i class="bi bi-check-circle-fill me-2"></i>
+              Friends
+            </button>
+            {% elif fr_sent %}
+            <form method="post" action="{% url 'users:respond_friend_request' fr_sent.pk 'cancel' %}" class="d-grid">
+              {% csrf_token %}
+              <button class="btn btn-outline-warning" type="submit">
+                <i class="bi bi-x-circle me-2"></i>
+                Cancel Request
+              </button>
+            </form>
+            {% elif fr_received %}
+            <div class="d-flex gap-2">
+              <form method="post" action="{% url 'users:respond_friend_request' fr_received.pk 'accept' %}"
+                class="flex-grow-1">
+                {% csrf_token %}
+                <button class="btn btn-primary w-100" type="submit">
+                  <i class="bi bi-person-check me-2"></i>
+                  Accept
+                </button>
+              </form>
+              <form method="post" action="{% url 'users:respond_friend_request' fr_received.pk 'reject' %}"
+                class="flex-grow-1">
+                {% csrf_token %}
+                <button class="btn btn-outline-danger w-100" type="submit">
+                  <i class="bi bi-person-x me-2"></i>
+                  Reject
+                </button>
+              </form>
+            </div>
+            {% else %}
+            <form method="post" action="{% url 'users:send_friend_request' target.pk %}" class="d-grid">
+              {% csrf_token %}
+              <button class="btn btn-primary" type="submit">
+                <i class="bi bi-person-plus me-2"></i>
+                Add Friend
+              </button>
+            </form>
+            {% endif %}
+          </div>
+        </div>
       </div>
+      <!-- End User Profile Card -->
     </div>
-  </div>
-  <div class="col-md-8">
-    <h4>About</h4>
-    <p>No additional profile information.</p>
   </div>
 </div>
 {% endblock %}

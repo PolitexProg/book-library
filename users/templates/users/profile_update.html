@@ -5,27 +5,43 @@
 {% block title %}Edit Profile{% endblock %}
 
 {% block content %}
+<div class="container py-4 py-md-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4 p-md-5">
+                    <h1 class="mb-4 fw-bold">Edit Profile</h1>
 
-    <h1>Edit Profile</h1>
-    <div class="row">
-        <div class="col-md-4">
-            {% if user.profile_picture %}
-                <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s profile picture" class="img-fluid rounded mb-3" style="max-width:200px;">
-            {% else %}
-                <div class="mb-3" style="width:200px;height:200px;background:#eee;display:flex;align-items:center;justify-content:center;border-radius:8px;">No image</div>
-            {% endif %}
-        </div>
-        <div class="col-md-8">
-            <form method="post" enctype="multipart/form-data" novalidate>
-                {% csrf_token %}
-                {{ form|crispy }}
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                    <a href="{% url 'users:profile' %}" class="btn btn-secondary">Cancel</a>
+                    <div class="row mb-4 align-items-center">
+                        <div class="col-auto">
+                            {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s profile picture"
+                                class="rounded-circle shadow-sm object-fit-cover" style="width: 100px; height: 100px;">
+                            {% else %}
+                            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center text-secondary fw-bold shadow-sm"
+                                style="width: 100px; height: 100px;">
+                                <i class="bi bi-person-fill fs-1"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col">
+                            <h4 class="mb-1">{{ user.username }}</h4>
+                            <p class="text-muted mb-0">{{ user.email }}</p>
+                        </div>
+                    </div>
+
+                    <form method="post" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                        {{ form|crispy }}
+
+                        <div class="d-flex gap-3 mt-4">
+                            <button type="submit" class="btn btn-primary-custom px-4">Save Changes</button>
+                            <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary px-4">Cancel</a>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
-
-    
+</div>
 {% endblock %}

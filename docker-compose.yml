@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - ./media-files:/app/media-files
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=your-prod-secret-key-change-this
+      - DATABASE_URL=postgres://bookuser:bookpass@db:5432/bookdb
+      - ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=bookdb
+      - POSTGRES_USER=bookuser
+      - POSTGRES_PASSWORD=bookpass
+
+volumes:
+  postgres_data:

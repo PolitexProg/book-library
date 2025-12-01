@@ -6,19 +6,20 @@
 {% block content %}
 <div class="row justify-content-center mt-5">
     <div class="col-md-6">
-        <div class="card shadow-sm">
+        <div class="card border-0 rounded-4 shadow-sm">
             <div class="card-body p-5">
                 <h2 class="card-title text-center mb-4">Create Account</h2>
 
                 <form method="post" novalidate>
                     {% csrf_token %}
                     {{ form|crispy }}
-                    <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>
+                    <button type="submit" class="btn btn-primary-custom w-100 mt-3">Register</button>
                 </form>
 
                 <hr class="my-4">
                 <p class="text-center text-muted">
-                    Already have an account? <a href="{% url 'users:login' %}" class="text-decoration-none">Login here</a>
+                    Already have an account? <a href="{% url 'users:login' %}" class="text-decoration-none">Login
+                        here</a>
                 </p>
             </div>
         </div>

@@ -1,6 +1,151 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Goodreads Clone - Discover Your Next Great Read{% endblock %}
 
 {% block content %}
-    <h1>Landing page of Goodreads Clone!</h1>
-    <p>This is the landing page. Use the navigation links above to explore the site.</p>
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 hero-content">
+                <h1 class="hero-title">Discover Your Next Great Read</h1>
+                <p class="hero-subtitle">Join thousands of book lovers sharing reviews, building reading lists, and
+                    connecting over stories that matter.</p>
+                <div>
+                    <a href="{% url 'users:register' %}" class="btn btn-primary-custom me-3">
+                        <i class="bi bi-person-plus me-1"></i>
+                        Start Reading Free
+                    </a>
+                    <a href="{% url 'books:list' %}" class="btn btn-outline-custom">
+                        <i class="bi bi-search me-1"></i>
+                        Browse Books
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center d-none d-lg-block">
+                <div style="font-size: 10rem; color: #cbd5e1;">
+                    <i class="bi bi-book"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <h2 class="section-title">Everything You Need to Track Your Reading</h2>
+        <p class="section-subtitle">Powerful features to enhance your reading experience</p>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    <h3 class="feature-title">Discover Books</h3>
+                    <p class="feature-description">Browse through thousands of books across all genres. Find your
+                        next favorite read with personalized recommendations.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-star-fill" style="color: #f59e0b;"></i>
+                    </div>
+                    <h3 class="feature-title">Write Reviews</h3>
+                    <p class="feature-description">Share your thoughts and rate books you've read. Help others
+                        discover great stories through your insights.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <h3 class="feature-title">Connect with Friends</h3>
+                    <p class="feature-description">Follow friends, see what they're reading, and get book
+                        recommendations from people you trust.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-journal-bookmark"></i>
+                    </div>
+                    <h3 class="feature-title">Track Your Reading</h3>
+                    <p class="feature-description">Keep track of books you want to read, are currently reading, and
+                        have finished. Set reading goals and celebrate achievements.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-chat-dots"></i>
+                    </div>
+                    <h3 class="feature-title">Join Discussions</h3>
+                    <p class="feature-description">Engage in meaningful conversations about books. Share opinions
+                        and discover new perspectives.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-lightbulb"></i>
+                    </div>
+                    <h3 class="feature-title">Personalized Experience</h3>
+                    <p class="feature-description">Get book recommendations tailored to your taste. Build your
+                        unique reading profile over time.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <div class="stat-number">10K+</div>
+                    <div class="stat-label">Books</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <div class="stat-number">5K+</div>
+                    <div class="stat-label">Readers</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <div class="stat-number">50K+</div>
+                    <div class="stat-label">Reviews</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <div class="stat-number">100K+</div>
+                    <div class="stat-label">Ratings</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-card">
+            <h2 class="cta-title">Ready to Start Your Reading Journey?</h2>
+            <p class="cta-text">Join our community today and discover books you'll love</p>
+            <a href="{% url 'users:register' %}" class="btn btn-white">
+                <i class="bi bi-person-plus me-1"></i>
+                Create Free Account
+            </a>
+        </div>
+    </div>
+</section>
 {% endblock %}
