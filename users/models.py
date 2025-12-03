@@ -58,7 +58,7 @@ class CustomUser(AbstractUser):
         ("admin", "Admin"),
     )
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="student")
-
+    school_class = models.CharField(max_length=20, blank=False, null=False, help_text="Example: 10A, 4, 8A")
 
     profile_picture = models.ImageField(
         upload_to="profile_pics/",
@@ -68,10 +68,15 @@ class CustomUser(AbstractUser):
     )
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} ({self.role})"
+        return f"{self.username} ({self.get_role_display()}, {self.school_class})"
+
+    def get_role_display(self):
+        return self.role
+
+
+
     def friends(self):
         """Return a queryset of users who are friends (accepted requests)."""
-        # Users who sent accepted requests to me
         sent = FriendshipRequest.objects.filter(
             from_user=self, status=FriendshipRequest.STATUS_ACCEPTED
         ).values_list("to_user", flat=True)
