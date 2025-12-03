@@ -58,3 +58,16 @@ class BookReview(models.Model):
 
     def __str__(self) -> str:
         return f"Review {self.user.username} to {self.book.title}"
+
+class WishListItem(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="wishlist_items")
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="wishlist_items")
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "book")
+        verbose_name = "Wish List Item"
+        verbose_name_plural = "Wish List Items"
+
+    def __str__(self) -> str:
+        return f"{self.user.username} --> {self.book.title}"

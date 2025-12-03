@@ -6,7 +6,7 @@
 <div class="container py-5">
     <h1 class="mb-4">📊 Dashboard for Class {{ class_name }}</h1>
 
-    <p class="lead">Топ-5 книг, рекомендованных учениками вашего класса:</p>
+    <p class="lead">Top 5 books recommended by students in your class:</p>
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for book in books_stats %}
@@ -51,7 +51,25 @@
         {% empty %}
         <div class="col-12">
             <div class="alert alert-info">
-                Ученики класса <strong>{{ class_name }}</strong> ещё не оставили отзывов.
+                Students in class <strong>{{ class_name }}</strong> have not left any reviews yet.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="container py-5">
+        <p class="lead">Top 5 wishlist books in {{ class_name }}</p>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for book in wishlist_books %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                {% if book.cover_picture %}
+                <img src="{{ book.cover_picture.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <a href="{% url 'books:detail' book.pk %}" class="btn btn-outline-primary mt-auto">View</a>
+                </div>
             </div>
         </div>
         {% endfor %}

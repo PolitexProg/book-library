@@ -1,6 +1,6 @@
 from django.views.generic import ListView, DetailView
 from django.db.models import Q, Avg, Count
-from app.models import Book, BookAuthor, BookReview
+from app.models import Book, BookAuthor, BookReview, WishListItem
 from django.core.paginator import Paginator
 from app.forms import BookDetailReviewForm
 from django.shortcuts import get_object_or_404, redirect, render
@@ -10,7 +10,10 @@ from django.db import IntegrityError, transaction
 from django.contrib import messages
 from django.http import Http404
 from users.models import CustomUser
-
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from app.models import Book, WishListItem
 
 class BooksView(ListView):
     template_name = "books/list.html"
@@ -65,6 +68,15 @@ class BookDetailView(DetailView):
         )
         context["reviews"] = BookReview.objects.filter(book=book).select_related("user")
         context["review_form"] = self.form_class()
+        
+        # Check if book is in user's wishlist
+        if self.request.user.is_authenticated:
+            context["is_in_wishlist"] = WishListItem.objects.filter(
+                user=self.request.user, book=book
+            ).exists()
+        else:
+            context["is_in_wishlist"] = False
+            
         return context
 
 
@@ -127,3 +139,24 @@ class TeachersDashboardView(LoginRequiredMixin, ListView):
         context["books_stats"] = books_stats
         context["class_name"] = teacher_class
         return context
+
+@login_required
+def add_to_wishlist(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    WishListItem.objects.get_or_create(user=request.user, book=book)
+    messages.success(request, f'"{book.title}" has been added to your wishlist.')
+    return redirect("books:detail", pk=book_id)
+
+@login_required
+def remove_from_wishlist(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    WishListItem.objects.filter(user=request.user, book=book).delete()
+    messages.info(request, f'"{book.title}" has been removed from your wishlist.')
+    return redirect("books:detail", pk=book_id)
+
+class WishlistView(LoginRequiredMixin, ListView):
+    template_name = "books/wishlist.html"
+    context_object_name = "wishlist_books"
+
+    def get_queryset(self):
+        return Book.objects.filter(wishlist_items__user=self.request.user)
