@@ -8,6 +8,8 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError, transaction
 from django.contrib import messages
+from django.http import Http404
+from users.models import CustomUser
 
 
 class BooksView(ListView):
@@ -100,28 +102,28 @@ class AddBookReviewView(LoginRequiredMixin, View):
         return render(request, "books/detail.html", context)
 
 
-# View for displaying all books
-# class BooksView(View):
-# def get(self, request):
-# Retrieve all books from the database
-# books = Book.objects.all()
-# search_query = request.GET.get('q', '')
-# if search_query:
-#    books = books.filter(title__icontains=search_query)
-# page_size = request.GET.get('page_size', 10)
-# paginator = Paginator(books, page_size)
-# page_num = request.GET.get('page', 1)
-# page_obj = paginator.get_page(page_num)
-# Render the books list template with the retrieved books
-# return render(
-# request,
-# 'books/list.html',
-#  'page_obj': page_obj,)
-#  'search_query': search_query,
-# )
+class TeachersDashboardView(LoginRequiredMixin, ListView):
+    template_name = "books/teachers_dashboard.html"
+    model = Book
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        if user.role != "teacher":
+            raise Http404("You are not authorized to view this page.")
+        teacher_class = user.school_class
 
-# class BookDetailView(View):
-#    def get(self, request, book_id):
-#        book = get_object_or_404(Book, id=book_id)
-#
-#        return render(request, 'books/detail.html', {'book': book})
+        students = CustomUser.objects.filter(role="student", school_class=teacher_class)
+        reviews = BookReview.objects.filter(user__in=students)
+
+        books_stats = (
+            reviews.values("book", "book__title", "book__cover_picture")
+            .annotate(
+                avg_rating=Avg("stars_given"),
+                review_count=Count("id")
+            )
+            .order_by("-avg_rating")[:5]
+        )
+
+        context["books_stats"] = books_stats
+        context["class_name"] = teacher_class
+        return context

@@ -7,7 +7,7 @@ from users.views import (
     ProfileUpdateView,
 )
 from users import views as users_views
-
+from app.views import TeachersDashboardView
 app_name = "users"
 
 urlpatterns = [
@@ -35,4 +35,5 @@ urlpatterns = [
     ),
     path("people/", users_views.PeopleListView.as_view(), name="people"),
     path("user/<int:pk>/", users_views.UserProfileView.as_view(), name="user_profile"),
+    path("teacher/dashboard/", TeachersDashboardView.as_view(), name="teachers_dashboard"),
 ]

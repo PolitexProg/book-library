@@ -63,6 +63,9 @@
                             <i class="bi bi-people me-2"></i>
                             Find People
                         </a>
+                        {% if user.is_authenticated and user.role == 'teacher' %}
+                        <a href="{% url 'users:teachers_dashboard' %}">Teacher Dashboard</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

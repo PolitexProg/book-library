@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">📊 Dashboard for Class {{ class_name }}</h1>
+
+    <p class="lead">Топ-5 книг, рекомендованных учениками вашего класса:</p>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for book in books_stats %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+
+                {# --- IMAGE SECTION WITH FALLBACK --- #}
+                {% if book.book__cover_picture %}
+                <img src="{{ book.book__cover_picture.url }}" class="card-img-top" alt="{{ book.book__title }}"
+                    style="height: 200px; object-fit: cover;">
+                {% else %}
+                {# Fallback if no image exists #}
+                <div class="card-img-top d-flex align-items-center justify-content-center bg-light text-muted"
+                    style="height: 200px;">
+                    <span class="small">No Cover Available</span>
+                </div>
+                {% endif %}
+
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ book.book__title }}</h5>
+
+                    {# --- FIXED STAR RATING LOGIC --- #}
+                    <div class="mb-2">
+                        <span class="text-warning">
+                            {% for i in "12345" %}
+                            {# Compare counter (1-5) against the raw rating number #}
+                            {% if forloop.counter <= book.avg_rating %} ★ {% else %} ☆ {% endif %} {% endfor %} </span>
+                                <span class="text-muted small ms-1">
+                                    ({{ book.avg_rating|floatformat:"1" }})
+                                </span>
+                    </div>
+
+                    <p class="text-muted small">{{ book.review_count }} отзыв(ов)</p>
+
+                    <a href="{% url 'books:detail' book.book %}" class="btn btn-outline-primary mt-auto">
+                        View Book
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Ученики класса <strong>{{ class_name }}</strong> ещё не оставили отзывов.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'books:list' %}" class="btn btn-secondary">← Back to Books</a>
+    </div>
+</div>
+{% endblock %}
