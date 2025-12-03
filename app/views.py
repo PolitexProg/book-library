@@ -1,5 +1,5 @@
 from django.views.generic import ListView, DetailView
-from django.db.models import Q
+from django.db.models import Q, Avg, Count
 from app.models import Book, BookAuthor, BookReview
 from django.core.paginator import Paginator
 from app.forms import BookDetailReviewForm
@@ -48,6 +48,12 @@ class BookDetailView(DetailView):
     context_object_name = "book"
     form_class = BookDetailReviewForm
 
+    def get_queryset(self):
+        return super().get_queryset().annotate(
+            average_rating=Avg("bookreview__stars_given"),
+            review_count=Count("bookreview")
+        )
+
     def get_context_data(self, **kwargs):
         """Add related authors and reviews to the context."""
         context = super().get_context_data(**kwargs)
@@ -62,7 +68,13 @@ class BookDetailView(DetailView):
 
 class AddBookReviewView(LoginRequiredMixin, View):
     def post(self, request, pk):
-        book = get_object_or_404(Book, pk=pk)
+        book = get_object_or_404(
+            Book.objects.annotate(
+                average_rating=Avg("bookreview__stars_given"),
+                review_count=Count("bookreview")
+            ),
+            pk=pk
+        )
         form = BookDetailReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)

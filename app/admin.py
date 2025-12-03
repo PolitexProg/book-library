@@ -26,7 +26,7 @@ class BookReviewInline(admin.TabularInline):
 class BookAdmin(admin.ModelAdmin):
     """Настройка отображения модели Книга."""
 
-    list_display = ("title", "isbn")
+    list_display = ("title", "isbn", "why_read")
     search_fields = ("title", "isbn")
     list_display_links = ("title",)
     inlines = [

@@ -14,13 +14,14 @@ class Book(models.Model):
         null=True,
         default="book_covers/default_cover.png",
     )
-
+    why_read = models.TextField(max_length=500, help_text="Why did you read this book?", blank=False)
+    
     class Meta:
         verbose_name = "Book"
         verbose_name_plural = "Books"
 
     def __str__(self) -> str:
-        return self.title
+        return f"{self.title} ({self.isbn})"
 
 
 class Author(models.Model):

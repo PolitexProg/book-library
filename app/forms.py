@@ -6,3 +6,6 @@ class BookDetailReviewForm(forms.ModelForm):
     class Meta:
         model = BookReview
         fields = ("content", "stars_given")
+        widgets = {
+            "content": forms.Textarea(attrs={"rows": 4}),
+        }
