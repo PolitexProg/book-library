@@ -12,6 +12,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("users/", include("users.urls"), name="users"),
     path("books/", include("app.urls"), name="books"),
+    path("notifications/", include("notifications.urls")),
     path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico', permanent=True)),
 ]
 

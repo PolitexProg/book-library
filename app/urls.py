@@ -10,5 +10,4 @@ urlpatterns = [
     path("<int:book_id>/add_to_wishlist/", add_to_wishlist, name="add_to_wishlist"),
     path("<int:book_id>/remove_from_wishlist/", remove_from_wishlist, name="remove_from_wishlist"),
     path("wishlist/", WishlistView.as_view(), name="wishlist"),
-
 ]

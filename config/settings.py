@@ -15,7 +15,7 @@ from pathlib import Path
 import dj_database_url
 from decouple import config
 
-DATABASE_URL = config('DATABASE_URL')
+DATABASE_URL = config('DATABASE_URL', default=None)
 
 if DATABASE_URL:
     DATABASES = {
@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "users",
     "crispy_forms",
     "crispy_bootstrap5",
+    "notifications",
 ]
 
 MIDDLEWARE = [

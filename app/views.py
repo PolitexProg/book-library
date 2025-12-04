@@ -14,6 +14,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from app.models import Book, WishListItem
+from notifications.models import Notification
+
 
 class BooksView(ListView):
     template_name = "books/list.html"
@@ -145,6 +147,7 @@ def add_to_wishlist(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     WishListItem.objects.get_or_create(user=request.user, book=book)
     messages.success(request, f'"{book.title}" has been added to your wishlist.')
+    Notification.objects.create(user=request.user, message=f'"{book.title}" has been added to your wishlist.')
     return redirect("books:detail", pk=book_id)
 
 @login_required

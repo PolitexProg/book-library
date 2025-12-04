@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-6 fw-bold">🔔 Notifications</h1>
+        {% if notifications %}
+        <form method="post" action="{% url 'notifications:mark_all_as_read' %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-secondary">
+                Mark all as read
+            </button>
+        </form>
+        {% endif %}
+    </div>
+
+    {% if notifications %}
+    <div class="list-group shadow-sm">
+        {% for notification in notifications %}
+        <div class="list-group-item list-group-item-action border-start-4 py-3
+                    {% if notification.is_read %}
+                        border-start-success
+                    {% else %}
+                        border-start-primary
+                    {% endif %}">
+            <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">
+                    {% if not notification.is_read %}
+                    <span class="badge bg-primary me-2">New</span>
+                    {% endif %}
+                    {{ notification.message }}
+                </h6>
+                <small class="text-muted">
+                    {{ notification.created_at|date:"M d, Y" }}<br>
+                    {{ notification.created_at|time:"H:i" }}
+                </small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <div class="mb-3">
+            <i class="bi bi-bell fs-1 text-muted"></i>
+        </div>
+        <h4 class="text-muted">No new notifications</h4>
+        <p class="text-muted mt-2">
+            You’ll see updates here when something happens — like a book being added to your wishlist or a new review.
+        </p>
+    </div>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{% url 'home_page' %}" class="btn btn-secondary">
+            ← Back to Home
+        </a>
+    </div>
+</div>
+{% endblock %}
